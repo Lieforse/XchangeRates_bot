@@ -1,0 +1,22 @@
+{
+  "availableCurrencies": ["USD", "EUR"],
+  "currencyButtons": [
+    [
+      {
+        "text": "USD:UAH",
+        "callback_data": "USD-UAH"
+      }
+    ],
+    [
+      {
+        "text": "EUR:UAH",
+        "callback_data": "EUR-UAH"
+      }
+    ]
+  ],
+  "currencyToEmodji": {
+    "USD": "🇺🇸",
+    "EUR": "🇪🇺",
+    "UAH": "🇺🇦"
+  }
+}

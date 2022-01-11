@@ -1,0 +1,30 @@
+{
+  "name": "currency-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cron": "^1.8.2",
+    "log4js": "^6.3.0",
+    "moment": "^2.29.1",
+    "node-schedule": "^2.1.0",
+    "sequelize": "^6.13.0",
+    "sqlite3": "^5.0.2",
+    "telegraf": "^4.5.2"
+  }
+}
