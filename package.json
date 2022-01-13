@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +20,10 @@
   },
   "dependencies": {
     "axios": "^0.24.0",
+    "chart.js": "^3.7.0",
+    "chartjs-node-canvas": "^4.1.5",
     "cron": "^1.8.2",
+    "dotenv": "^11.0.0",
     "log4js": "^6.3.0",
     "moment": "^2.29.1",
     "node-schedule": "^2.1.0",

@@ -1,0 +1,50 @@
+{
+  "telegram": {
+    "availableCurrencies": ["USD", "EUR"],
+    "currencyButtons": [
+      [
+        {
+          "text": "USD:UAH",
+          "callback_data": "USD-UAH"
+        }
+      ],
+      [
+        {
+          "text": "EUR:UAH",
+          "callback_data": "EUR-UAH"
+        }
+      ]
+    ],
+    "currencyToEmodji": {
+      "USD": "🇺🇸",
+      "EUR": "🇪🇺",
+      "UAH": "🇺🇦"
+    }
+  },
+  "apiUrls": {
+    "NBU": "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange"
+  },
+  "logger": {
+    "level": "info"
+  },
+  "charts": {
+    "daysNumber": 14,
+    "scalesOffset": 0.2,
+    "options": {
+      "size": {
+        "width": 1300,
+        "height": 600
+      },
+      "colors": {
+        "line": "#61ce84",
+        "text": "#888787",
+        "grid": "#222222",
+        "background": "#121212"
+      },
+      "font": {
+        "size": 16,
+        "weight": 500
+      }
+    }
+  }
+}

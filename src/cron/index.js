@@ -1,8 +1,6 @@
 const schedule = require('node-schedule')
-const log = require('log4js').getLogger('cron')
+const log = require('../utils').logger('cron')
 const { getFromNbu_action } = require('../actions/modules/getFromNbu_action')
-
-log.level = 'debug'
 
 const cron = async (bot, { models }) => {
   log.info('Starting cron')
@@ -14,7 +12,7 @@ const cron = async (bot, { models }) => {
         getFromNbu_action(bot, chatId, 'USD')
       })
     } catch (error) {
-      log.info(error)
+      log.error(error)
     }
   })
 }

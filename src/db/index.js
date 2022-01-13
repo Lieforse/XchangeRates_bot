@@ -1,26 +1,26 @@
 const { Sequelize } = require('sequelize')
+const log = require('../utils').logger('db')
 const { models } = require('./models/index')
 
 const database = async () => {
   const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: '../../localDb/index.sqlite',
+    storage: '../../database/index.sqlite',
   })
 
   try {
     await sequelize.authenticate()
 
-    console.log('Connection to DB established')
+    log.info('Connection to DB established')
   } catch (error) {
-    console.log('Error in DB initialization: ', error)
+    log.error('Error in DB initialization: ', error)
   }
 
-  await sequelize.sync()
-
   const db = {}
-
   db.sequelize = sequelize
   db.models = models(sequelize)
+
+  await db.sequelize.sync()
 
   return db
 }

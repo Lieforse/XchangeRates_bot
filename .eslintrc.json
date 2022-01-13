@@ -9,6 +9,7 @@
     "sourceType": "script"
   },
   "rules": {
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-use-before-define": "off"
   }
 }

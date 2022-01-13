@@ -1,6 +1,7 @@
 const { Telegraf } = require('telegraf')
 const schedule = require('node-schedule')
-const { botToken } = require('./configs/secrets.json')
+const env = require('dotenv').config()
+const { exitCb } = require('./src/utils')
 const { database } = require('./src/db')
 const { cron } = require('./src/cron')
 
@@ -10,7 +11,7 @@ const { commands } = require('./src/commands')
 const server = async () => {
   const db = await database()
 
-  const bot = new Telegraf(botToken)
+  const bot = new Telegraf(env.parsed.BOT_TOKEN)
 
   // initializing bot actions
   actions(bot)
@@ -23,14 +24,8 @@ const server = async () => {
   cron(bot, db)
 
   // Enable graceful stop
-  process.once('SIGTERM', () => bot.stop('SIGTERM'))
-  process.on('SIGINT', async () => {
-    await bot.stop('SIGINT')
-    await db.sequelize.close()
-    await schedule.gracefulShutdown()
-
-    process.exit(0)
-  })
+  process.on('SIGTERM', () => exitCb(bot, db, schedule))
+  process.on('SIGINT', () => exitCb(bot, db, schedule))
 }
 
 server()

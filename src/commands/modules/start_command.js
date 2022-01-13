@@ -1,4 +1,7 @@
-const { currencyButtons } = require('../../../configs/telegram.json')
+const {
+  telegram: { currencyButtons },
+} = require('../../../configs/config.json')
+const log = require('../../utils').logger('commands')
 
 module.exports.start_command = async (ctx, models) => {
   const chatId = ctx.chat.id
@@ -12,7 +15,7 @@ module.exports.start_command = async (ctx, models) => {
       },
     })
   } catch (error) {
-    console.log(error)
+    log.error(error)
   }
 
   ctx.reply('Choose the currency from the list above to get the actual exchange rate', {

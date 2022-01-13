@@ -1,7 +1,9 @@
 const trunc = require('./trunc')
-const { currencyToEmodji } = require('../../../configs/telegram.json')
+const {
+  telegram: { currencyToEmodji },
+} = require('../../../configs/config.json')
 
-module.exports = ({ cc, rate, exchangedate }) => `**** Exchange rate ****
+module.exports = ({ cc, rate, exchangedate }) => `<b>Exchange rate</b>
 
   From: ${cc} ${currencyToEmodji[cc]}
   To: UAH ${currencyToEmodji.UAH}
