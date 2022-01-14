@@ -21,6 +21,7 @@ const server = async () => {
 
   bot.launch()
 
+  // initialing cron
   cron(bot, db)
 
   // Enable graceful stop
