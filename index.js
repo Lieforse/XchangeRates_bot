@@ -16,12 +16,12 @@ const server = async () => {
   // initializing bot actions
   actions(bot)
 
-  // initialing bot commands
+  // initializing bot commands
   commands(bot, db)
 
   bot.launch()
 
-  // initialing cron
+  // initializing cron
   cron(bot, db)
 
   // Enable graceful stop
