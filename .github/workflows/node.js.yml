@@ -15,6 +15,13 @@ jobs:
         node-version: [16.x]
 
     steps:
+      - name: Caching all dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./.env
+            ./database/index.sqlite
+          key: ${{ runner.os }}-${{ github.action }}-xchange_rates_bot
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
