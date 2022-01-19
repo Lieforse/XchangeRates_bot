@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 
-module.exports.users = (db) => {
+module.exports = (db) => {
   const model = {
     chatId: {
       type: DataTypes.STRING,

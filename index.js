@@ -8,21 +8,30 @@ const { cron } = require('./src/cron')
 const { actions } = require('./src/actions')
 const { commands } = require('./src/commands')
 
-const server = async () => {
-  const db = await database()
+const log = require('./src/utils').logger('index')
 
-  const bot = new Telegraf(env.parsed.BOT_TOKEN)
+const server = async () => {
+  const { DB_MODE, BOT_TOKEN } = env.parsed
+
+  if (!(DB_MODE && BOT_TOKEN)) {
+    log.error('Provide all ENV variables to start the project')
+    exitCb()
+  }
+
+  const db = await database(DB_MODE)
+
+  const bot = new Telegraf(BOT_TOKEN)
 
   // initializing bot actions
-  actions(bot)
+  actions(db, bot)
 
   // initializing bot commands
-  commands(bot, db)
+  commands(db, bot)
 
   bot.launch()
 
   // initializing cron
-  cron(bot, db)
+  cron(db, bot)
 
   // Enable graceful stop
   process.on('SIGTERM', () => exitCb(bot, db, schedule))

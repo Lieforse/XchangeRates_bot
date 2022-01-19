@@ -1,6 +1,6 @@
 const { start_command } = require('./modules/start_command')
 
-const commands = (bot, { models }) => {
+const commands = ({ models }, bot) => {
   bot.command('start', (ctx) => start_command(ctx, models))
 }
 

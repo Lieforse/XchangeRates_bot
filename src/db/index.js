@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize')
 const log = require('../utils').logger('db')
-const { models } = require('./models/index')
+const { modelsCreator } = require('./models/index')
 
-const database = async () => {
+const database = async (mode) => {
   const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: '../../database/index.sqlite',
@@ -18,9 +18,21 @@ const database = async () => {
 
   const db = {}
   db.sequelize = sequelize
-  db.models = models(sequelize)
+  db.Sequelize = Sequelize
+  db.models = modelsCreator(sequelize)
 
-  await db.sequelize.sync()
+  log.info(`Starting DB in ${mode.toUpperCase()} sync mode`)
+
+  switch (mode) {
+    case 'force':
+      await db.sequelize.sync({ force: true })
+      break
+    case 'alter':
+      await db.sequelize.sync({ alter: true })
+      break
+    default:
+      await db.sequelize.sync()
+  }
 
   return db
 }

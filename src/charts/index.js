@@ -7,7 +7,7 @@ const {
 
 const canvasRenderService = new ChartJSNodeCanvas(size)
 
-const plugin = {
+const cunstomBackground = {
   id: 'custom_canvas_background_color',
   beforeDraw: (chart) => {
     const ctx = chart.canvas.getContext('2d')
@@ -73,7 +73,7 @@ const createImage = async ({ labels, prices, scales }) => {
         },
       },
     },
-    plugins: [plugin],
+    plugins: [cunstomBackground],
   }
 
   const dataUrl = await canvasRenderService.renderToDataURL(configuration)

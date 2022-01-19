@@ -2,15 +2,17 @@ const schedule = require('node-schedule')
 const log = require('../utils').logger('cron')
 const { getFromNbu_action } = require('../actions/modules/getFromNbu_action')
 
-const cron = async (bot, { models }) => {
+const cron = async (db, bot) => {
   log.info('Starting cron')
-  schedule.scheduleJob('0 0 9 * * *', async () => {
+  schedule.scheduleJob({ hour: 9, tz: 'EET' }, async () => {
+    log.info('Starting daily job')
     try {
-      const users = await models.users.findAll()
+      const users = await db.models.users.findAll()
 
-      users.forEach(({ chatId }) => {
-        getFromNbu_action(bot, chatId, 'USD')
-      })
+      const usersPromise = users.map(({ chatId }) => getFromNbu_action(db, bot, chatId, 'USD'))
+      await Promise.all(usersPromise)
+
+      log.info('Daily job finished')
     } catch (error) {
       log.error(error)
     }

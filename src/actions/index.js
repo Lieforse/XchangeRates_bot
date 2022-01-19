@@ -4,11 +4,11 @@ const {
   telegram: { availableCurrencies },
 } = require('../../configs/config.json')
 
-const actions = (bot) => {
+const actions = (db, bot) => {
   availableCurrencies.forEach((currency) => {
     const actionName = `${currency}-UAH`
 
-    bot.action(actionName, (ctx) => getFromNbu_action(bot, ctx, currency))
+    bot.action(actionName, (ctx) => getFromNbu_action(db, bot, ctx.chat.id, currency))
   })
 }
 
