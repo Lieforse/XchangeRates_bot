@@ -29,7 +29,7 @@ const dbExchangeRatesActualizer = async (db, currency) => {
 
   for (let i = daysNumber - 1; i >= 0; i -= 1) {
     const date = getPreviousDayDate(i)
-    const isDayPresent = dbRecords.find((item) => moment(item.date).format('YYYYMMDD') === todayDate)
+    const isDayPresent = dbRecords.find((item) => moment(item.date).format('YYYYMMDD') === date)
 
     if (!isDayPresent) {
       const { data } = await getNbuData(currency, date)

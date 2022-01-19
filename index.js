@@ -11,6 +11,8 @@ const { commands } = require('./src/commands')
 const log = require('./src/utils').logger('index')
 
 const server = async () => {
+  log.info('Starting project')
+
   const { DB_MODE, BOT_TOKEN } = env.parsed
 
   if (!(DB_MODE && BOT_TOKEN)) {
