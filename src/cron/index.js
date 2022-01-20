@@ -4,7 +4,7 @@ const { getFromNbu_action } = require('../actions/modules/getFromNbu_action')
 
 const cron = async (db, bot) => {
   log.info('Starting cron')
-  schedule.scheduleJob({ hour: 9, tz: 'EET' }, async () => {
+  schedule.scheduleJob({ hour: 9, minute: 0, tz: 'EET' }, async () => {
     log.info('Starting daily job')
     try {
       const users = await db.models.users.findAll()
