@@ -17,6 +17,7 @@ module.exports = (db) => {
     date: {
       type: DataTypes.DATE,
       allowNull: false,
+      unique: true,
     },
   }
 
