@@ -1,6 +1,6 @@
 const moment = require('moment')
 const math = require('mathjs')
-const { getTodayDate } = require('../utils')
+const { getTodayDate, trunc } = require('../utils')
 const { dbExchangeRatesActualizer } = require('./dbExchangeRatesActualizer')
 
 const convertCurrencies = async (db, { from, to, value }) => {
@@ -20,7 +20,7 @@ const convertCurrencies = async (db, { from, to, value }) => {
     value: Number(value),
   }
 
-  const result = math.evaluate('rate * value', scope)
+  const result = trunc(math.evaluate('rate * value', scope))
   return result
 }
 
