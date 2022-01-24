@@ -13,7 +13,7 @@ const dbExchangeRatesActualizer = async (db, currency) => {
 
   const dbRecords = await models.exchangeRates.findAll({
     where: {
-      to: currency,
+      from: currency,
       date: {
         [Op.gte]: moment(getPreviousDayDate(daysNumber), 'YYYYMMDD'),
       },
@@ -35,8 +35,8 @@ const dbExchangeRatesActualizer = async (db, currency) => {
       const { data } = await getNbuData(currency, date)
       const { cc, rate, exchangedate } = data[0]
       const newRecord = {
-        from: 'UAH',
-        to: cc,
+        from: cc,
+        to: 'UAH',
         rate,
         date: moment(exchangedate, 'DD.MM.YYYY'),
       }

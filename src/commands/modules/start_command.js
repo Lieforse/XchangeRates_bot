@@ -3,7 +3,8 @@ const {
 } = require('../../../configs/config.json')
 const log = require('../../utils').logger('commands')
 
-module.exports.start_command = async (ctx, models) => {
+module.exports.start_command = async (ctx, db) => {
+  const { models } = db
   const chatId = ctx.chat.id
   try {
     await models.users.findOrCreate({

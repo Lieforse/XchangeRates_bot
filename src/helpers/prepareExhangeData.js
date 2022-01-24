@@ -22,7 +22,7 @@ const prepareExchangeData = async (db, currency) => {
 
   const dataFromDb = await models.exchangeRates.findAll({
     where: {
-      to: currency,
+      from: currency,
       date: {
         [Op.gte]: moment(getPreviousDayDate(daysNumber), 'YYYYMMDD'),
       },

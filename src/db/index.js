@@ -5,7 +5,7 @@ const { modelsCreator } = require('./models/index')
 const database = async (mode) => {
   const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: '../../database/index.sqlite',
+    storage: './database/index.sqlite',
   })
 
   try {

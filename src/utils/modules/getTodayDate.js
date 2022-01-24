@@ -1,3 +1,3 @@
 const moment = require('moment')
 
-module.exports = () => moment().utcOffset(120).format('YYYYMMDD')
+module.exports = () => moment().format('YYYYMMDD')
