@@ -1,9 +1,7 @@
 const { prepareExchangeData } = require('../../helpers/prepareExhangeData')
-const { logger } = require('../../utils')
+const log = require('../../utils').logger(__filename)
 
-const log = logger('actions')
-
-module.exports.getFromNbu_action = async (db, bot, chatId, currency) => {
+module.exports = async (db, bot, chatId, currency) => {
   try {
     const { preparedImage, todayParsedData } = await prepareExchangeData(db, currency)
 

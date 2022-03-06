@@ -1,13 +1,24 @@
-module.exports = (bot, db, cron) => {
+const log = require('./logger')(__filename)
+
+module.exports = async (bot, db, cron) => {
+  const processes = []
   if (bot) {
-    bot.stop()
+    processes.push(exitFunction(() => bot.stop, 'Bot has been stopped'))
   }
   if (db) {
-    db.sequelize.close()
+    processes.push(exitFunction(() => db.sequelize.close, 'Database has been stopped'))
   }
   if (cron) {
-    cron.gracefulShutdown()
+    processes.push(exitFunction(() => cron.gracefulShutdown, 'Cron has been stopped'))
   }
 
-  process.exit(0)
+  await Promise.all(processes).then(() => {
+    log.info('All processes have been stopped')
+    process.exit(0)
+  })
+}
+
+const exitFunction = async (cb, message) => {
+  await cb()
+  log.info(message)
 }

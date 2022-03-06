@@ -3,10 +3,11 @@ const moment = require('moment')
 const {
   charts: { daysNumber, scalesOffset },
 } = require('../../configs/config.json')
-const { parseNbuData, getPreviousDayDate, trunc } = require('../utils')
-const log = require('../utils').logger('prepareExchangeData')
+const { prettifyNbuData, getPreviousDayDate, trunc } = require('../utils')
 const { createImage } = require('../charts')
 const { dbExchangeRatesActualizer } = require('./dbExchangeRatesActualizer')
+
+const log = require('../utils').logger(__filename)
 
 const prepareExchangeData = async (db, currency) => {
   const {
@@ -31,7 +32,7 @@ const prepareExchangeData = async (db, currency) => {
 
   const chart = await prepareDataForChart(dataFromDb)
   const preparedImage = chart.replace('data:image/png;base64,', '')
-  const todayParsedData = parseNbuData(dataFromDb[dataFromDb.length - 1])
+  const todayParsedData = prettifyNbuData(dataFromDb[dataFromDb.length - 1])
 
   return { preparedImage, todayParsedData }
 }
@@ -41,7 +42,7 @@ async function prepareDataForChart(data) {
   const prices = []
 
   data.forEach(({ rate, date }) => {
-    labels.push(moment(date, 'DD.MM.YYYY').format('DD.MM.YY'))
+    labels.push(moment(date).format('DD.MM.YY'))
     prices.push(rate)
   })
 

@@ -3,9 +3,10 @@ const math = require('mathjs')
 const { getTodayDate, trunc } = require('../utils')
 const { dbExchangeRatesActualizer } = require('./dbExchangeRatesActualizer')
 
-const convertCurrencies = async (db, { from, to, value }) => {
+const convertCurrencies = async (db, { from, to, amount }) => {
   const { models } = db
   await dbExchangeRatesActualizer(db, from)
+
   const todayDate = getTodayDate()
   const dbRecord = await models.exchangeRates.findAll({
     where: {
@@ -15,13 +16,15 @@ const convertCurrencies = async (db, { from, to, value }) => {
     },
   })
 
+  const { rate } = dbRecord[0]
+
   const scope = {
-    rate: Number(dbRecord[0].rate),
-    value: Number(value),
+    rate: Number(rate),
+    value: Number(amount),
   }
 
   const result = trunc(math.evaluate('rate * value', scope))
-  return result
+  return { result, rate }
 }
 
 module.exports = { convertCurrencies }

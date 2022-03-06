@@ -1,16 +1,16 @@
-const { convertCurrencies } = require('../../helpers/convertCurrencies')
 const { parseConvertCommand } = require('../../utils')
 const {
   telegram: { availableCurrencies },
 } = require('../../../configs/config.json')
+const { prepareConvertData } = require('../../helpers/prepareConvertData')
 
-module.exports.convertCommand = async (bot, db, ctx) => {
+module.exports = async (bot, db, ctx) => {
   const chatId = ctx.chat.id
   const message = ctx.message.text
-  const { from, to, value } = parseConvertCommand(message)
+  const { from, to, amount } = parseConvertCommand(message)
 
-  if (!(to && from && value)) {
-    bot.telegram.sendMessage(chatId, 'Please write message in right format')
+  if (!(to && from && amount)) {
+    bot.telegram.sendMessage(chatId, 'Please write message in the right format')
     return
   }
 
@@ -20,10 +20,10 @@ module.exports.convertCommand = async (bot, db, ctx) => {
   }
 
   if (to !== 'UAH') {
-    bot.telegram.sendMessage(chatId, 'Converting available only for UAH')
+    bot.telegram.sendMessage(chatId, 'Second converting currency is only UAH')
     return
   }
 
-  const result = await convertCurrencies(db, { from, to, value })
-  bot.telegram.sendMessage(chatId, result)
+  const result = await prepareConvertData(db, { from, to, amount })
+  bot.telegram.sendMessage(chatId, result, { parse_mode: 'HTML' })
 }

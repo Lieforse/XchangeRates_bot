@@ -15,6 +15,20 @@
         }
       ]
     ],
+    "introButtons": [
+      [
+        {
+          "text": "Get the actual exchange rates",
+          "callback_data": "exchange_rates_hub_action"
+        }
+      ],
+      [
+        {
+          "text": "Convert currencies",
+          "callback_data": "convert_action"
+        }
+      ]
+    ],
     "currencyToEmodji": {
       "USD": "🇺🇸",
       "EUR": "🇪🇺",

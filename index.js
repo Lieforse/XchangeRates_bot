@@ -8,7 +8,7 @@ const { cron } = require('./src/cron')
 const { actions } = require('./src/actions')
 const { commands } = require('./src/commands')
 
-const log = require('./src/utils').logger('index')
+const log = require('./src/utils').logger('main')
 
 const server = async () => {
   log.info('Starting project')
@@ -36,8 +36,8 @@ const server = async () => {
   cron(db, bot)
 
   // Enable graceful stop
-  process.on('SIGTERM', () => exitCb(bot, db, schedule))
-  process.on('SIGINT', () => exitCb(bot, db, schedule))
+  process.on('SIGTERM', async () => exitCb(bot, db, schedule))
+  process.on('SIGINT', async () => exitCb(bot, db, schedule))
 }
 
 server()

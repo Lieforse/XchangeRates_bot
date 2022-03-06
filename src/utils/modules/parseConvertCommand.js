@@ -1,10 +1,10 @@
 module.exports = (command) => {
-  const parsedString = command.replace('/convert ', '').replace('to ', '').toUpperCase()
+  const parsedString = command.replace('/c ', '').toUpperCase()
   const [from, to, value] = parsedString.split(' ')
 
   return {
     from,
     to,
-    value,
+    amount: parseFloat(value.replace(',', '.')),
   }
 }

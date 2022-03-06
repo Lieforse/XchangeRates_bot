@@ -4,9 +4,9 @@ const {
   telegram: { currencyToEmodji },
 } = require('../../../configs/config.json')
 
-module.exports = ({ to, rate, date }) => `<b>Exchange rate</b>
+module.exports = ({ from, rate, date }) => `<b>Exchange rate</b>
 
-  From: ${to} ${currencyToEmodji[to]}
+  From: ${from} ${currencyToEmodji[from]}
   To: UAH ${currencyToEmodji.UAH}
   Price: ${trunc(rate)}
   Date: ${moment(date).format('DD.MM.YY')}`
