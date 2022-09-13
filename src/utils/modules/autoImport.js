@@ -11,8 +11,8 @@ module.exports = (dirname, filename) => {
     .filter((file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js')
     .forEach((file) => {
       const filePath = path.join(dirname, file)
+      const methodName = path.basename(file, '.js')
       const method = require(filePath)
-      const methodName = file.slice(0, -3)
 
       methods[methodName] = method
     })

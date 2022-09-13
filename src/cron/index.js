@@ -8,6 +8,10 @@ const cron = async (db, bot) => {
     await subscriptions_job(db, bot)
   })
 
+  schedule.scheduleJob({ minute: 0, tz: 'EET' }, async (time) => {
+    await subscriptions_job(db, bot, time)
+  })
+
   schedule.scheduleJob({ hour: 0, minute: 0, tz: 'EET' }, async () => {
     await dataActualizer_job(db)
   })

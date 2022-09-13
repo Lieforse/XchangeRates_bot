@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 
-module.exports = (db) => {
+module.exports = (db, modelName) => {
   const model = {
     from: {
       type: DataTypes.STRING,
@@ -11,7 +11,7 @@ module.exports = (db) => {
       allowNull: false,
     },
     rate: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     date: {
@@ -20,7 +20,7 @@ module.exports = (db) => {
     },
   }
 
-  const exchangeRates = db.define('exchangeRates', model, { tableName: 'exchangeRates' })
+  const exchangeRates = db.define(modelName, model, { tableName: modelName })
 
-  return exchangeRates
+  return [exchangeRates]
 }

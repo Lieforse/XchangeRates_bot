@@ -5,9 +5,8 @@ const log = require('../../utils').logger(__filename)
 
 module.exports = async (db, bot, ctx) => {
   const { models } = db
-  const chatId = ctx.chat.id
+  const chatId = String(ctx.chat.id)
 
-  ctx.deleteMessage()
   try {
     await models.users.findOrCreate({
       where: {

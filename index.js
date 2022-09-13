@@ -7,22 +7,24 @@ const { cron } = require('./src/cron')
 
 const { actions } = require('./src/actions')
 const { commands } = require('./src/commands')
+const validateEnv = require('./src/utils/modules/validateEnv')
 
 const log = require('./src/utils').logger('main')
 
 const server = async () => {
   log.info('Starting project')
 
-  const { DB_MODE, BOT_TOKEN } = env.parsed
-
-  if (!(DB_MODE && BOT_TOKEN)) {
-    log.error('Provide all ENV variables to start the project')
+  const isEnvValid = validateEnv(env.parsed)
+  if (!isEnvValid) {
+    log.fatal('Provide all ENV variables to start the bot')
     exitCb()
+
+    return
   }
 
-  const db = await database(DB_MODE)
+  const db = await database(env.parsed)
 
-  const bot = new Telegraf(BOT_TOKEN)
+  const bot = new Telegraf(env.parsed.BOT_TOKEN)
 
   // initializing bot actions
   actions(db, bot)
@@ -30,7 +32,17 @@ const server = async () => {
   // initializing bot commands
   commands(db, bot)
 
-  bot.launch()
+  try {
+    await bot.launch()
+
+    log.info('Bot has been launched')
+  } catch (error) {
+    log.fatal(`Error in launching bot: ${error}`)
+  }
+
+  bot.catch((error) => {
+    log.error(`Error from bot: ${error}`)
+  })
 
   // initializing cron
   cron(db, bot)

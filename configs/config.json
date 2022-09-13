@@ -27,12 +27,35 @@
           "text": "Convert currencies",
           "callback_data": "convert_action"
         }
+      ],
+      [
+        {
+          "text": "Settings",
+          "callback_data": "settings_action"
+        }
+      ]
+    ],
+    "settingsButtons": [
+      [
+        {
+          "text": "Manage subscriptions",
+          "callback_data": "settings_subscriptions_action"
+        }
+      ],
+      [
+        {
+          "text": "Manage banks for exchange rates",
+          "callback_data": "settings_banks_action"
+        }
       ]
     ],
     "currencyToEmodji": {
       "USD": "🇺🇸",
       "EUR": "🇪🇺",
       "UAH": "🇺🇦"
+    },
+    "emojis": {
+      "exclamation": "❗️"
     }
   },
   "apiUrls": {
@@ -41,6 +64,7 @@
   "logger": {
     "level": "info"
   },
+  "requiredEnvValues": ["DB_MODE", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_HOST", "DB_PORT", "BOT_TOKEN"],
   "charts": {
     "daysNumber": 14,
     "scalesOffset": 0.2,

@@ -18,6 +18,7 @@ const dbExchangeRatesActualizer = async (db, currency) => {
         [Op.gte]: moment(getPreviousDayDate(daysNumber), 'YYYYMMDD'),
       },
     },
+    raw: true,
   })
   const todayDate = getTodayDate()
 
@@ -41,9 +42,21 @@ const dbExchangeRatesActualizer = async (db, currency) => {
         date: moment(exchangedate, 'DD.MM.YYYY'),
       }
 
-      models.exchangeRates.create(newRecord)
+      await models.exchangeRates.create(newRecord)
     }
   }
 }
 
-module.exports = { dbExchangeRatesActualizer }
+const checkIfDataActualized = async (models, currency) => {
+  const isActualized = models.exchangeRates.findOne({
+    where: {
+      from: currency,
+      date: moment(),
+    },
+    raw: true,
+  })
+
+  return !!isActualized
+}
+
+module.exports = { dbExchangeRatesActualizer, checkIfDataActualized }

@@ -2,10 +2,11 @@ const { Sequelize } = require('sequelize')
 const log = require('../utils').logger('db')
 const { modelsCreator } = require('./models/index')
 
-const database = async (mode) => {
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database/index.sqlite',
+const database = async ({ DB_MODE, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT }) => {
+  const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+    host: DB_HOST,
+    port: DB_PORT,
+    dialect: 'postgres',
   })
 
   try {
@@ -13,7 +14,7 @@ const database = async (mode) => {
 
     log.info('Connection to DB established')
   } catch (error) {
-    log.error('Error in DB initialization: ', error)
+    log.error('Error in DB authentication: ', error)
   }
 
   const db = {}
@@ -21,9 +22,9 @@ const database = async (mode) => {
   db.Sequelize = Sequelize
   db.models = modelsCreator(sequelize)
 
-  log.info(`Starting DB in ${mode.toUpperCase()} sync mode`)
+  log.info(`Starting DB in ${DB_MODE.toUpperCase()} sync mode`)
 
-  switch (mode) {
+  switch (DB_MODE) {
     case 'force':
       await db.sequelize.sync({ force: true })
       break

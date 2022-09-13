@@ -1,11 +1,9 @@
 const moment = require('moment')
 const math = require('mathjs')
 const { getTodayDate, trunc } = require('../utils')
-const { dbExchangeRatesActualizer } = require('./dbExchangeRatesActualizer')
 
 const convertCurrencies = async (db, { from, to, amount }) => {
   const { models } = db
-  await dbExchangeRatesActualizer(db, from)
 
   const todayDate = getTodayDate()
   const dbRecord = await models.exchangeRates.findAll({
