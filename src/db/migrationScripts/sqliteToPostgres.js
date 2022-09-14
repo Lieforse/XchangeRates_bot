@@ -10,11 +10,11 @@ const sqliteToPostgres = async () => {
     storage: './database/index.sqlite',
   })
 
-  const sqliteDb = await createDatabase(sqliteDbConnection)
+  const sqliteDb = await createDatabase(sqliteDbConnection, '')
 
-  const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = env.parsed
+  const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } = env.parsed
 
-  const postgresDbConnection = new Sequelize('postgres', DB_USER, DB_PASSWORD, {
+  const postgresDbConnection = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
     port: DB_PORT,
     dialect: 'postgres',
