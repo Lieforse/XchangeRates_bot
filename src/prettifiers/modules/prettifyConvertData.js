@@ -1,5 +1,5 @@
 const moment = require('moment')
-const trunc = require('./trunc')
+const trunc = require('../../utils/modules/trunc')
 const {
   telegram: { currencyToEmodji },
 } = require('../../../configs/config.json')

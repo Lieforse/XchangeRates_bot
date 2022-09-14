@@ -4,9 +4,6 @@ const { dataActualizer_job, subscriptions_job } = require('./modules')
 
 const cron = async (db, bot) => {
   log.info('Started cron')
-  schedule.scheduleJob({ hour: 9, minute: 0, tz: 'EET' }, async () => {
-    await subscriptions_job(db, bot)
-  })
 
   schedule.scheduleJob({ minute: 0, tz: 'EET' }, async (time) => {
     await subscriptions_job(db, bot, time)

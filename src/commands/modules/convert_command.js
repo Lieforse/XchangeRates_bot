@@ -1,4 +1,4 @@
-const { parseConvertCommand } = require('../../utils')
+const { parsers } = require('../../utils')
 const {
   telegram: { availableCurrencies },
 } = require('../../../configs/config.json')
@@ -7,7 +7,7 @@ const { prepareConvertData } = require('../../helpers/prepareConvertData')
 module.exports = async (bot, db, ctx) => {
   const chatId = ctx.chat.id
   const message = ctx.message.text
-  const { from, to, amount } = parseConvertCommand(message)
+  const { from, to, amount } = parsers.convertCommand(message)
 
   if (!(to && from && amount)) {
     bot.telegram.sendMessage(chatId, 'Please write message in the right format')

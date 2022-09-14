@@ -1,4 +1,4 @@
-const { prettifyConvertData } = require('../utils')
+const { prettifyConvertData } = require('../prettifiers')
 const { convertCurrencies } = require('./convertCurrencies')
 
 const prepareConvertData = async (db, { from, to, amount }) => {

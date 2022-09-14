@@ -8,6 +8,12 @@ module.exports = async (db, bot, ctx) => {
   const chatId = String(ctx.chat.id)
 
   try {
+    ctx.deleteMessage()
+  } catch (error) {
+    log.error(error)
+  }
+
+  try {
     await models.users.findOrCreate({
       where: {
         chatId,

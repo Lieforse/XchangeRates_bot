@@ -1,4 +1,5 @@
-const { createBackButton, prettifySubscriptions } = require('../../utils')
+const { prettifySubscriptions } = require('../../prettifiers')
+const { createBackButton } = require('../../utils')
 
 module.exports = async (db, bot, ctx, goBackData) => {
   const { models } = db
@@ -15,7 +16,7 @@ module.exports = async (db, bot, ctx, goBackData) => {
 
   bot.telegram.sendMessage(
     chatId,
-    'To subscribe for a currency, please send the next message: \n\n/s {From currency} {To currency} {Time}\n\n/s USD UAH 9:00\n\nTime should be only in hours, minutes will not be counted.\n\n\nTo unsubsribe - send, the same data but start the command with /unsub :\n\n/unsub {From currency} {To currency} {Time}',
+    'To subscribe for a currency, please send the next message: \n\n/s {From currency} {To currency} {Time}\n\n/s USD UAH 9:00\n\nTime should be only in hours, minutes will not be counted.\n\n\nTo unsubsribe - send, the id of the specified subscription that you can find in the list above with command /unsub in the next format:\n\n/unsub {id}',
     {
       reply_markup: {
         inline_keyboard: [createBackButton(goBackData)],

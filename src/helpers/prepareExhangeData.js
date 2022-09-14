@@ -2,9 +2,10 @@ const moment = require('moment')
 const {
   charts: { daysNumber, scalesOffset },
 } = require('../../configs/config.json')
-const { prettifyNbuData, getPreviousDayDate, trunc } = require('../utils')
+const { getPreviousDayDate, trunc } = require('../utils')
 const { createImage } = require('../charts')
 const { dbExchangeRatesActualizer, checkIfDataActualized } = require('./dbExchangeRatesActualizer')
+const { prettifyNbuData } = require('../prettifiers')
 
 const log = require('../utils').logger(__filename)
 

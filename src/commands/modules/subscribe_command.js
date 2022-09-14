@@ -1,4 +1,4 @@
-const { parseSubscribeCommand, createBackButton } = require('../../utils')
+const { parsers, createBackButton } = require('../../utils')
 const log = require('../../utils').logger(__filename)
 const {
   telegram: { availableCurrencies },
@@ -7,7 +7,7 @@ const {
 module.exports = async (bot, db, ctx) => {
   const chatId = String(ctx.chat.id)
   const message = ctx.message.text
-  const { from, to, time } = parseSubscribeCommand(message)
+  const { from, to, time } = parsers.subscribeCommand(message)
 
   if (!(to && from && time)) {
     bot.telegram.sendMessage(chatId, 'Please write message in the right format')
@@ -25,9 +25,9 @@ module.exports = async (bot, db, ctx) => {
   }
 
   try {
-    const isUnique = await db.models.subscriptions.findOne({ where: { chatId, currency: from, time } })
+    const isPresent = await db.models.subscriptions.findOne({ where: { chatId, currency: from, time } })
 
-    if (!isUnique) {
+    if (!isPresent) {
       await db.models.subscriptions.create({
         chatId,
         currency: from,
