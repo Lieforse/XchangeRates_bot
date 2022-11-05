@@ -10,11 +10,9 @@ module.exports = ({ base, quote, allSourcesData }) => {
   Object.values(allSourcesData).forEach((source) => {
     const { isActualized, label, data } = source
 
-    const todayData = data[data.length - 1]
-    const previousDayData = data[data.length - 2]
-
-    const numericDifference = trunc(Big(todayData.y).minus(previousDayData.y))
-    const percentageDifference = trunc(Big(todayData.y).div(previousDayData.y).minus(1).times(100))
+    if (!data.length) {
+      return
+    }
 
     prettifiedText += `\n\nSource: ${label}`
 
@@ -22,9 +20,21 @@ module.exports = ({ base, quote, allSourcesData }) => {
       prettifiedText += `\n${emojis.exclamation}There is no today data, please wait a couple of minutes and try again${emojis.exclamation}\n`
     }
 
-    prettifiedText += `\nRate: ${trunc(todayData.y)}\nPrevious day rate: ${trunc(
-      previousDayData.y,
-    )}\nDifference: ${numericDifference}(${percentageDifference}%)\nDate: ${todayData.x}`
+    const todayData = data[data.length - 1]
+    prettifiedText += `\nRate: ${trunc(todayData.y)}`
+
+    if (data.length > 2) {
+      const previousDayData = data[data.length - 2]
+
+      const numericDifference = trunc(Big(todayData.y).minus(previousDayData.y))
+      const percentageDifference = trunc(Big(todayData.y).div(previousDayData.y).minus(1).times(100))
+
+      prettifiedText += `\nPrevious day rate: ${trunc(
+        previousDayData.y,
+      )}\nDifference: ${numericDifference}(${percentageDifference}%)`
+    }
+
+    prettifiedText += `\nDate: ${todayData.x}`
   })
 
   return prettifiedText
