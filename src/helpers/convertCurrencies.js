@@ -1,27 +1,24 @@
 const moment = require('moment')
-const math = require('mathjs')
+const Big = require('big.js')
 const { getTodayDate, trunc } = require('../utils')
 
-const convertCurrencies = async (db, { from, to, amount }) => {
+const convertCurrencies = async (db, { base, quote, amount, source }) => {
   const { models } = db
 
   const todayDate = getTodayDate()
-  const dbRecord = await models.exchangeRates.findAll({
+  const dbRecord = await models.exchangeRates.findOne({
     where: {
-      from,
-      to,
+      source,
+      base,
+      quote,
       date: moment(todayDate, 'YYYYMMDD'),
     },
   })
 
-  const { rate } = dbRecord[0]
+  const { rate } = dbRecord
 
-  const scope = {
-    rate: Number(rate),
-    value: Number(amount),
-  }
+  const result = trunc(Big(rate).times(amount))
 
-  const result = trunc(math.evaluate('rate * value', scope))
   return { result, rate }
 }
 

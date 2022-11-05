@@ -2,7 +2,7 @@ const path = require('path')
 const logger = require('log4js')
 const {
   logger: { level },
-} = require('../../../configs/config.json')
+} = require('../../../configs')
 
 module.exports = (filename) => {
   const category = path.basename(filename, '.js')

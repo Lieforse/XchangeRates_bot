@@ -1,5 +1,5 @@
 const { isEqual } = require('lodash')
-const { requiredEnvValues } = require('../../../configs/config.json')
+const { requiredEnvValues } = require('../../../configs')
 
 module.exports = (env) => {
   const requiredValues = requiredEnvValues.sort()

@@ -1,29 +1,29 @@
 const { parsers } = require('../../utils')
 const {
-  telegram: { availableCurrencies },
-} = require('../../../configs/config.json')
+  exchangeRates: { availableCurrencies },
+} = require('../../../configs')
 const { prepareConvertData } = require('../../helpers/prepareConvertData')
 
 module.exports = async (bot, db, ctx) => {
   const chatId = ctx.chat.id
   const message = ctx.message.text
-  const { from, to, amount } = parsers.convertCommand(message)
+  const { base, quote, amount, source } = parsers.convertCommand(message)
 
-  if (!(to && from && amount)) {
+  if (!(quote && base && amount)) {
     bot.telegram.sendMessage(chatId, 'Please write message in the right format')
     return
   }
 
-  if (!availableCurrencies.includes(from)) {
-    bot.telegram.sendMessage(chatId, `This 'from' currency ${from} isn't available for converting`)
+  if (!availableCurrencies.includes(base)) {
+    bot.telegram.sendMessage(chatId, `This 'from' currency ${base} isn't available for converting`)
     return
   }
 
-  if (to !== 'UAH') {
+  if (quote !== 'UAH') {
     bot.telegram.sendMessage(chatId, 'Second converting currency is only UAH')
     return
   }
 
-  const result = await prepareConvertData(db, { from, to, amount })
+  const result = await prepareConvertData(db, { base, quote, amount, source })
   bot.telegram.sendMessage(chatId, result, { parse_mode: 'HTML' })
 }

@@ -1,6 +1,6 @@
 const {
   telegram: { introButtons },
-} = require('../../../configs/config.json')
+} = require('../../../configs')
 const log = require('../../utils').logger(__filename)
 
 module.exports = async (ctx, db) => {

@@ -3,7 +3,7 @@ const {
   charts: {
     options: { size, colors, font },
   },
-} = require('../../configs/config.json')
+} = require('../../configs')
 
 const canvasRenderService = new ChartJSNodeCanvas(size)
 
@@ -19,20 +19,12 @@ const cunstomBackground = {
   },
 }
 
-const createImage = async ({ labels, prices, scales }) => {
+const createImage = async ({ labels, datasets, scales }) => {
   const configuration = {
     type: 'line',
     data: {
       labels,
-      datasets: [
-        {
-          data: prices,
-          fill: false,
-          borderColor: [colors.line],
-          borderWidth: 3,
-          tension: 0.2,
-        },
-      ],
+      datasets,
     },
     options: {
       layout: {
@@ -41,12 +33,15 @@ const createImage = async ({ labels, prices, scales }) => {
       elements: {
         point: {
           radius: 3.5,
-          backgroundColor: colors.line,
         },
       },
       plugins: {
         legend: {
-          display: false,
+          display: true,
+          labels: {
+            color: colors.line,
+            font,
+          },
         },
       },
       scales: {

@@ -7,6 +7,11 @@ module.exports = (db, modelName) => {
       allowNull: false,
       unique: true,
     },
+    exchangeSources: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+      defaultValue: ['nbu'],
+    },
   }
 
   const associate = (models) => {

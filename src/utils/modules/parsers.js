@@ -1,11 +1,12 @@
 const convertCommand = (command) => {
   const parsedString = command.replace('/c ', '').toUpperCase()
-  const [from, to, value] = parsedString.split(' ')
+  const [base, quote, value, source] = parsedString.split(' ')
 
   return {
-    from,
-    to,
+    base,
+    quote,
     amount: parseFloat(value.replace(',', '.')),
+    source: source.toLowerCase() || 'mono',
   }
 }
 
@@ -19,11 +20,11 @@ const unsubscribeCommand = (command) => {
 
 const subscribeCommand = (command) => {
   const parsedString = command.replace('/s ', '').toUpperCase()
-  const [from, to, time] = parsedString.split(' ')
+  const [base, quote, time] = parsedString.split(' ')
 
   return {
-    from,
-    to,
+    base,
+    quote,
     time,
   }
 }

@@ -1,6 +1,5 @@
 {
   "telegram": {
-    "availableCurrencies": ["USD", "EUR"],
     "currencyButtons": [
       [
         {
@@ -44,8 +43,8 @@
       ],
       [
         {
-          "text": "Manage banks for exchange rates",
-          "callback_data": "settings_banks_action"
+          "text": "Manage sources for exchange rates",
+          "callback_data": "settings_sources_action"
         }
       ]
     ],
@@ -55,11 +54,20 @@
       "UAH": "🇺🇦"
     },
     "emojis": {
-      "exclamation": "❗️"
+      "exclamation": "❗️",
+      "check": "✅"
+    }
+  },
+  "exchangeRates": {
+    "availableCurrencies": ["USD", "EUR"],
+    "availableSources": {
+      "nbu": "NBU",
+      "mono": "Monobank"
     }
   },
   "apiUrls": {
-    "NBU": "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange"
+    "NBU": "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange",
+    "Mono": "https://api.monobank.ua/bank/currency"
   },
   "logger": {
     "level": "info"
@@ -74,7 +82,10 @@
         "height": 600
       },
       "colors": {
-        "line": "#61ce84",
+        "sourceToColor": {
+          "nbu": "#61ce84",
+          "mono": "#f8800c"
+        },
         "text": "#888787",
         "grid": "#222222",
         "background": "#121212"

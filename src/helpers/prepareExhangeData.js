@@ -1,80 +1,123 @@
 const moment = require('moment')
 const {
-  charts: { daysNumber, scalesOffset },
-} = require('../../configs/config.json')
+  exchangeRates: { availableSources },
+  charts: {
+    daysNumber,
+    scalesOffset,
+    options: {
+      colors: { sourceToColor },
+    },
+  },
+} = require('../../configs')
 const { getPreviousDayDate, trunc } = require('../utils')
 const { createImage } = require('../charts')
-const { dbExchangeRatesActualizer, checkIfDataActualized } = require('./dbExchangeRatesActualizer')
-const { prettifyNbuData } = require('../prettifiers')
+const { checkIfDataActualized } = require('./dbExchangeRatesActualizer')
+const { prettifyChartData } = require('../prettifiers')
 
 const log = require('../utils').logger(__filename)
 
-const prepareExchangeData = async (db, currency) => {
+const prepareExchangeData = async (db, chatId, base) => {
   const {
     Sequelize: { Op },
     models,
   } = db
 
-  try {
-    await dbExchangeRatesActualizer(db, currency)
-  } catch (error) {
-    log.error("Data can't be actualized: ", error)
-  }
+  const datasets = []
+  const allPrices = []
+  let chartLabels = []
+  const allSourcesData = {}
 
-  const isActualized = await checkIfDataActualized(models, currency)
-  if (!isActualized) {
-    log.info('Data is not actualized yet, operating with previous day data')
-  }
+  const subscribedSources = await models.users
+    .findAll({
+      where: { chatId },
+      attributes: ['exchangeSources'],
+      raw: true,
+    })
+    .then((data) => data[0].exchangeSources)
 
-  let dataFromDb
+  for (let i = 0; i < subscribedSources.length; i += 1) {
+    const source = subscribedSources[i]
 
-  if (!isActualized) {
-    const previousDayNumber = 1
-    dataFromDb = await models.exchangeRates.findAll({
+    const isActualized = await checkIfDataActualized(models, base, source)
+
+    if (!isActualized) {
+      log.info('Data is not actualized yet, operating with previous day data')
+    }
+
+    let dateQuery
+
+    if (!isActualized) {
+      const previousDayNumber = 1
+      dateQuery = {
+        [Op.gte]: moment(getPreviousDayDate(daysNumber + 1), 'YYYYMMDD'),
+        [Op.lte]: moment(getPreviousDayDate(previousDayNumber), 'YYYYMMDD'),
+      }
+    } else {
+      dateQuery = {
+        [Op.gte]: moment(getPreviousDayDate(daysNumber), 'YYYYMMDD'),
+      }
+    }
+
+    const dataFromDb = await models.exchangeRates.findAll({
       where: {
-        from: currency,
-        date: {
-          [Op.gte]: moment(getPreviousDayDate(daysNumber + 1), 'YYYYMMDD'),
-          [Op.lte]: moment(getPreviousDayDate(previousDayNumber), 'YYYYMMDD'),
-        },
+        source,
+        base,
+        date: dateQuery,
       },
     })
-  } else {
-    dataFromDb = await models.exchangeRates.findAll({
-      where: {
-        from: currency,
-        date: {
-          [Op.gte]: moment(getPreviousDayDate(daysNumber), 'YYYYMMDD'),
-        },
-      },
-    })
+
+    const { labels, chartData, prices } = await prepareDataForChart(dataFromDb)
+
+    const dataset = {
+      label: availableSources[source],
+      data: chartData,
+      fill: false,
+      borderColor: [sourceToColor[source]],
+      backgroundColor: [sourceToColor[source]],
+      borderWidth: 3,
+      tension: 0.2,
+    }
+
+    datasets.push(dataset)
+    allPrices.push(...prices)
+    allSourcesData[source] = {
+      isActualized,
+      label: availableSources[source],
+      data: chartData,
+    }
+
+    if (labels.length > chartLabels.length) {
+      chartLabels = labels
+    }
   }
 
-  const chart = await prepareDataForChart(dataFromDb)
-  const preparedImage = chart.replace('data:image/png;base64,', '')
-  const todayDataText = prettifyNbuData(dataFromDb[dataFromDb.length - 1], isActualized)
+  const chartScales = {
+    min: trunc(Math.min(...allPrices) - scalesOffset),
+    max: trunc(Math.max(...allPrices) + scalesOffset),
+  }
+
+  const image = await createImage({ datasets, scales: chartScales, labels: chartLabels })
+
+  const preparedImage = image.replace('data:image/png;base64,', '')
+  const todayDataText = prettifyChartData({ base, quote: 'UAH', allSourcesData })
 
   return { preparedImage, todayDataText }
 }
 
 async function prepareDataForChart(data) {
   const labels = []
+  const chartData = []
   const prices = []
 
   data.forEach(({ rate, date }) => {
-    labels.push(moment(date).format('DD.MM.YY'))
+    const formattedDate = moment(date).format('DD.MM.YY')
+
+    labels.push(formattedDate)
+    chartData.push({ y: rate, x: formattedDate })
     prices.push(rate)
   })
 
-  const scales = {
-    min: trunc(Math.min(...prices) - scalesOffset),
-    max: trunc(Math.max(...prices) + scalesOffset),
-  }
-
-  const chartData = { labels, prices, scales }
-  const image = await createImage(chartData)
-
-  return image
+  return { labels, chartData, prices }
 }
 
 module.exports = {

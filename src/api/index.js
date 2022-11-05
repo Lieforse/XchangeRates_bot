@@ -1,10 +1,10 @@
-const { get } = require('axios')
-const {
-  apiUrls: { NBU },
-} = require('../../configs/config.json')
+const { NbuConnector, MonoConnector } = require('./connectors')
 
-const getNbuData = (currency, date) => get(`${NBU}?valcode=${currency}&date=${date}&json`)
+const connectorsHashmap = {
+  nbu: new NbuConnector(),
+  mono: new MonoConnector(),
+}
 
 module.exports = {
-  getNbuData,
+  connectorsHashmap,
 }

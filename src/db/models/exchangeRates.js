@@ -2,11 +2,15 @@ const { DataTypes } = require('sequelize')
 
 module.exports = (db, modelName) => {
   const model = {
-    from: {
+    source: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    to: {
+    base: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    quote: {
       type: DataTypes.STRING,
       allowNull: false,
     },

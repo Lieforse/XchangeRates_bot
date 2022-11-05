@@ -1,6 +1,6 @@
 const {
   telegram: { currencyButtons },
-} = require('../../../configs/config.json')
+} = require('../../../configs')
 const { createBackButton } = require('../../utils')
 
 module.exports = async (db, bot, ctx, goBackData) => {

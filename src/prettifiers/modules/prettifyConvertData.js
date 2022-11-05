@@ -1,14 +1,16 @@
 const moment = require('moment')
 const trunc = require('../../utils/modules/trunc')
 const {
+  exchangeRates: { availableSources },
   telegram: { currencyToEmodji },
-} = require('../../../configs/config.json')
+} = require('../../../configs')
 
-module.exports = ({ from, to, amount, result, rate }) => `<b>Converting currencies result</b>
+module.exports = ({ base, quote, amount, result, rate, source }) => `<b>Converting currencies result</b>
 
-  From: ${from} ${currencyToEmodji[from]}
+  Source: ${availableSources[source]}
+  From: ${base} ${currencyToEmodji[base]}
   Amount: ${amount}
-  To: ${to || 'UAH'} ${to ? currencyToEmodji[to] : currencyToEmodji.UAH}
+  To: ${quote || 'UAH'} ${quote ? currencyToEmodji[quote] : currencyToEmodji.UAH}
   Rate: ${trunc(rate)}
   Date: ${moment().format('DD.MM.YY')}
 
