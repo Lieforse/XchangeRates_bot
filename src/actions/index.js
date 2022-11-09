@@ -18,7 +18,7 @@ const actions = (db, bot) => {
   availableCurrencies.forEach((currency) => {
     const actionName = `${currency}-UAH`
 
-    bot.action(actionName, (ctx) => exchange_action(db, bot, ctx, currency))
+    bot.action(actionName, (ctx) => exchange_action(db, bot, ctx.chat.id, currency))
   })
 
   Object.keys(availableSources).forEach((source) => {
