@@ -24,7 +24,7 @@ const prepareExchangeData = async (db, chatId, base) => {
 
   const datasets = []
   const allPrices = []
-  let chartLabels = []
+  const chartLabels = []
   const allSourcesData = {}
 
   const subscribedSources = await models.users
@@ -64,6 +64,7 @@ const prepareExchangeData = async (db, chatId, base) => {
         base,
         date: dateQuery,
       },
+      order: ['date'],
     })
 
     const { labels, chartData, prices } = await prepareDataForChart(dataFromDb)
@@ -80,14 +81,11 @@ const prepareExchangeData = async (db, chatId, base) => {
 
     datasets.push(dataset)
     allPrices.push(...prices)
+    chartLabels.push(...labels)
     allSourcesData[source] = {
       isActualized,
       label: availableSources[source],
       data: chartData,
-    }
-
-    if (labels.length > chartLabels.length) {
-      chartLabels = labels
     }
   }
 
@@ -96,7 +94,7 @@ const prepareExchangeData = async (db, chatId, base) => {
     max: trunc(Math.max(...allPrices) + scalesOffset),
   }
 
-  const image = await createImage({ datasets, scales: chartScales, labels: chartLabels })
+  const image = await createImage({ datasets, scales: chartScales, labels: prepareLabelsForChart(chartLabels) })
 
   const preparedImage = image.replace('data:image/png;base64,', '')
   const todayDataText = prettifyChartData({ base, quote: 'UAH', allSourcesData })
@@ -118,6 +116,12 @@ async function prepareDataForChart(data) {
   })
 
   return { labels, chartData, prices }
+}
+
+function prepareLabelsForChart(labels) {
+  return Array.from(new Set(labels)).sort(
+    (a, b) => moment(a, 'DD.MM.YY').format('YYYYMMDD') - moment(b, 'DD.MM.YY').format('YYYYMMDD'),
+  )
 }
 
 module.exports = {
